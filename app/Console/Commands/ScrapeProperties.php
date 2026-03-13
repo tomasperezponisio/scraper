@@ -19,9 +19,6 @@ class ScrapeProperties extends Command
         $onlySource = $this->option('source');
 
         $scrapers = [
-            'mercadolibre'    => MercadoLibreScraper::class,
-            'zonaprop'        => ZonapropScraper::class,
-            'argenprop'       => ArgenpropScraper::class,
             'bahiablancaprop' => BahiaBlancaPropScraper::class,
         ];
 
