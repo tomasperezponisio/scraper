@@ -16,13 +16,17 @@ class BahiaBlancaPropScraper
     private const PRICE_MIN   = 120000;
     private const PRICE_MAX   = 250000;
 
+    /** @var array All Casa-en-Venta Macrocentro URLs found in sitemap this run */
+    public array $sitemapUrls = [];
+
     public function fetch(): array
     {
         $properties = [];
 
-        $candidates = $this->fetchCandidateUrls();
+        [$newCandidates, $allSitemapUrls] = $this->fetchCandidateUrls();
+        $this->sitemapUrls = $allSitemapUrls;
 
-        foreach ($candidates as $candidate) {
+        foreach ($newCandidates as $candidate) {
             $result = $this->fetchProperty($candidate['url'], $candidate['external_id'], $candidate['lastmod']);
             if ($result) {
                 $properties[] = $result;
@@ -100,10 +104,14 @@ class BahiaBlancaPropScraper
             ];
         }
 
-        // Subtract URLs already in DB
-        $existing = Property::where('source', self::SOURCE)->pluck('url')->flip()->all();
+        // All sitemap URLs (used by command to detect removals)
+        $allSitemapUrls = array_column($candidates, 'url');
 
-        return array_values(array_filter($candidates, fn($c) => ! isset($existing[$c['url']])));
+        // Only return candidates not yet in DB
+        $existing     = Property::where('source', self::SOURCE)->pluck('url')->flip()->all();
+        $newCandidates = array_values(array_filter($candidates, fn($c) => ! isset($existing[$c['url']])));
+
+        return [$newCandidates, $allSitemapUrls];
     }
 
     private function fetchProperty(string $url, string $externalId, ?string $lastmod): ?array

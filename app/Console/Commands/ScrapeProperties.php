@@ -37,8 +37,6 @@ class ScrapeProperties extends Command
                 $properties = $scraper->fetch();
                 $newCount   = 0;
 
-                $fetchedUrls = collect($properties)->pluck('url')->filter()->flip()->all();
-
                 foreach ($properties as $data) {
                     if (empty($data['url'])) continue;
 
@@ -56,11 +54,15 @@ class ScrapeProperties extends Command
                     }
                 }
 
-                // Mark as removed any DB properties from this source not seen in this scrape run
-                Property::where('source', $name)
-                    ->whereNull('removed_at')
-                    ->whereNotIn('url', array_keys($fetchedUrls))
-                    ->update(['removed_at' => now()]);
+                // Detect removals using the full sitemap URL list (if available)
+                // Only run if the scraper exposed a non-empty sitemapUrls list
+                $sitemapUrls = property_exists($scraper, 'sitemapUrls') ? $scraper->sitemapUrls : [];
+                if (count($sitemapUrls) > 0) {
+                    Property::where('source', $name)
+                        ->whereNull('removed_at')
+                        ->whereNotIn('url', $sitemapUrls)
+                        ->update(['removed_at' => now()]);
+                }
 
                 $this->line("  → {$newCount} new out of " . count($properties) . " fetched");
                 $totalNew += $newCount;
