@@ -1,4 +1,5 @@
 *.log
+/storage/app/bahiablancaprop-sitemap.xml
 .DS_Store
 .env
 .env.backup
