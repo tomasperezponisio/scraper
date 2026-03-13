@@ -26,10 +26,10 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Copy .env and generate key
+      - name: Copy .env and set key
         run: |
           cp .env.example .env
-          php artisan key:generate
+          echo "APP_KEY=${{ secrets.APP_KEY }}" >> .env
 
       - name: Ensure SQLite database exists
         run: |
@@ -48,6 +48,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add database/database.sqlite docs/index.html
           git diff --staged --quiet || git commit -m "chore: daily scrape $(date -u +'%Y-%m-%d')"
+          git stash --include-untracked || true
           git fetch origin master
           git rebase origin/master
+          git stash drop || true
           git push
