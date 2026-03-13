@@ -1,0 +1,54 @@
+name: Daily Property Scraper
+
+on:
+  schedule:
+    # 11:00 UTC = 08:00 Argentina (UTC-3)
+    - cron: '0 11 * * *'
+  workflow_dispatch:  # allow manual trigger from GitHub UI
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write  # needed to commit the DB and report back
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: sqlite3, pdo_sqlite, curl
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Copy .env
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Ensure SQLite database exists
+        run: |
+          mkdir -p database
+          if [ ! -f database/database.sqlite ]; then
+            touch database/database.sqlite
+          fi
+
+      - name: Run migrations
+        run: php artisan migrate --force
+
+      - name: Run scraper
+        run: php artisan scrape:run
+
+      - name: Commit updated database and report
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add database/database.sqlite docs/index.html
+          git diff --staged --quiet || git commit -m "chore: daily scrape $(date -u +'%Y-%m-%d')"
+          git push

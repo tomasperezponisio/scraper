@@ -1,0 +1,2741 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casas en venta — Bahía Blanca</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --border: #e5e2db;
+    --text: #1a1a1a;
+    --text-muted: #6b6b6b;
+    --accent: #2563eb;
+    --accent-light: #eff6ff;
+    --new-badge: #16a34a;
+    --tag-bg: #f1f0ed;
+    --removed-bg: #fef2f2;
+    --removed-border: #fecaca;
+    --removed-text: #991b1b;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  header h1 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  header p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .stats {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--accent);
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .section-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-title span {
+    background: var(--new-badge);
+    color: white;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    transform: translateY(-1px);
+  }
+
+  .card.is-new {
+    border-color: #86efac;
+    box-shadow: 0 0 0 1px #86efac;
+  }
+
+  .card.is-removed {
+    border-color: var(--removed-border);
+    background: var(--removed-bg);
+    opacity: 0.7;
+  }
+
+  .card.is-removed .card-title,
+  .card.is-removed .card-price {
+    text-decoration: line-through;
+    color: var(--text-muted);
+  }
+
+  .badge-removed {
+    background: #fee2e2;
+    color: var(--removed-text);
+  }
+
+  .card-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    background: var(--tag-bg);
+  }
+
+  .card-image-placeholder {
+    width: 100%;
+    height: 180px;
+    background: var(--tag-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 2rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .badge-source {
+    background: var(--tag-bg);
+    color: var(--text-muted);
+  }
+
+  .badge-new {
+    background: #dcfce7;
+    color: #15803d;
+  }
+
+  .card-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-price {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.02em;
+  }
+
+  .card-price small {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    margin-left: 0.25rem;
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.6rem;
+  }
+
+  .tag {
+    background: var(--tag-bg);
+    border-radius: 6px;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .card-description {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .card-date {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .card-link {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+    padding: 0.3rem 0.7rem;
+    background: var(--accent-light);
+    border-radius: 6px;
+    transition: background 0.1s;
+  }
+
+  .card-link:hover {
+    background: #dbeafe;
+  }
+
+  .empty {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 3rem;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 1rem; }
+    .container { padding: 1rem; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Casas en venta · Bahía Blanca</h1>
+    <p>Actualizado el 13/03/2026 20:33</p>
+  </div>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-value">40</div>
+      <div class="stat-label">Nuevas hoy</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">40</div>
+      <div class="stat-label">Total</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">25</div>
+      <div class="stat-label">Con precio</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+    <h2 class="section-title">
+    Nuevas hoy
+    <span>40</span>
+  </h2>
+  <div class="grid">
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/8fdc7e69f7f6fbc970b19df90e2da4e8.jpg" alt="Casa en Venta en Avenida Colon 635, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Avenida Colon 635, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 5 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                      </div>
+
+          <p class="card-description">Casa en venta sobre Avenida Colón Una propiedad amplia, funcional y lista para disfrutar en una excelente ubicación. Características principales: 5 dormitorios con amplios placares 2 baños Cocina funcional con buen espacio de guardado Living cómodo y luminoso Comedor independiente Lavadero separado Patio ideal para disfrutar al aire libre Amplio balcón con excelente ventilación Garage Calefacción para mayor confort</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/83413/Casa-en-Venta-en-Avenida-Colon-635-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/3482b05b3d64ddf910af7b631d2f4775.jpeg" alt="Casa en Venta en Chile 215, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Chile 215, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 155.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 129 m²</span>
+                </div>
+
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/82732/Casa-en-Venta-en-Chile-215-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/a6bfb7b9ce1f2058c7682813622bcc80.png" alt="Casa en Venta en Blandengues 785 , Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Blandengues 785 , Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 168.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 4 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                      </div>
+
+          <p class="card-description">Casa en Venta Multifamiliar Ingreso por cochera profunda para hasta 3 vehiculos también puede ser usada como patio seco con canteros 1° Vivienda + Dos dormitorios, + Baño Completo + Living Comedor con cocina integrada + Oficina con baño tipo toilette + Quincho en 1° piso por escalera con parrilla 2° Vivienda + Un Dormitorio con placares empotrados + Living Comedor + Cocina Separada por puerta granero + Baño al fondo completo con ducha + Pequeño patio con parrilla 3° Vivienda (LOCAL) + Local al frente con cortina metalica enrollable + EN PRIMER PISO + Dos Habitaciones + Una pequeña estilo oficina + Otra grande estilo dormitorio o posible deposito + Baño sencillo tipo toilette Cualquier Consulta Por medidas o para coordinar visitas consultar al 2914393908 2915038128</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/82389/Casa-en-Venta-en-Blandengues-785-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/3bac90bda31a2fa0f5bef9f3646af989.jpg" alt="Casa en Venta en Vieytes 678, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Vieytes 678, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                    <span class="tag">📐 256 m²</span>
+                </div>
+
+          <p class="card-description">Esta propiedad se desarrolla sobre un lote de 300 m², con una superficie cubierta de 256 m², destacándose por sus ambientes amplios, distribución funcional y muy buen nivel de equipamiento. La vivienda cuenta con una organización cómoda y bien definida: 3 dormitorios en suite 4 baños Living Cocina separada Comedor independiente Lavadero 6 aires acondicionados Sistema de alarma con monitoreo Patio verde con riego por aspersión y por goteo Cochera propia Quincho, ideal para reuniones y disfrute.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/81714/Casa-en-Venta-en-Vieytes-678-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/b6bc0a46cc61f8ee19a09fb145e9f2b9.jpg" alt="Casa en Venta en Rodriguez 400, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Rodriguez 400, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 4 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                      </div>
+
+          <p class="card-description">364 m² cubiertos de excelente calidad constructiva Desarrollada en tres plantas -Planta baja: Recepcion Living amplio Cocina comedor integrada Baño de recepción Garage doble con portón automático Lavadero independiente Patio con pileta climatizada, cascada y parrilla - Primer piso: 4 dormitorios, el principal en suite con jacuzzi y vestidor, y los otros 3 con placard, uno de ellos con balcon aterrazado. - Segundo piso: Gran quincho con parrilla Cocina completa Baño Amplia terraza al contrafrente y balcon al frente Todas las plantas poseen aires acondicionados</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/80757/Casa-en-Venta-en-Rodriguez-400-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/6a488193e445cdcf357de6dc6fee27e4.png" alt="Casa en Venta en España 600, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en España 600, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 120.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 154 m²</span>
+                </div>
+
+          <p class="card-description">Nuevo Ingreso – Chalet 3 dormitorios / 3 baños Una propiedad amplia, funcional y lista para disfrutar. La casa cuenta con: • Living comedor luminoso • Cocina amplia • 2 dormitorios (uno con baño en suite) • 2 baños completos • Garage para auto mediano • Patio seco • Ventiladores de techo • Alarma + 8 cámaras de seguridad • Varios espacios de guardado Además, un quincho independiente con habitación y baño completo: ideal para invitados, hobbies o trabajo. 154 m² cubiertos Una opción cómoda, bien distribuida y pensada para vivir con tranquilidad. Consultanos para más info o coordinar una visita. Ares Inversiones Inmobiliarias – Tu próximo hogar te está esperando.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/80305/Casa-en-Venta-en-España-600-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/979621dce6027448300c394080f4a656.jpg" alt="Casa en Venta en Rondeau 742, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Rondeau 742, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 323 m²</span>
+                </div>
+
+          <p class="card-description">Se vende importante propiedad con cuadra de panaderia, Superficie del Lote 433 m2, Superficie Construida 323 m2. No posee gas. Ideal para inversores. SI estas interesado comunicate al 4522431 / 4536624 de lunes a viernes de 9.00 a 16.00.-</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/79417/Casa-en-Venta-en-Rondeau-742-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/536b863f360a897eea29b993f3badc68.jpg" alt="Casa en Venta en Donado 800, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Donado 800, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 130.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                      </div>
+
+          <p class="card-description">Vendemos Donado 800 casa en venta distribuida en dos plantas Planta baja: hall de entrada, living, cocina comedor con parrilla en la cocina, 1 dormitorio, baño completo, escritorio, gge y patio chico Planta alta: 2 dormitorios, baño , playroom Valor 130.000 uss Evaluamos permuta por Dpto 2 dorm con cochera céntrico</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/79132/Casa-en-Venta-en-Donado-800-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/c463c4c6e2d730376505b8b9f15e7905.jpg" alt="Casa en Venta en Bonpland 145, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Bonpland 145, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 245.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 4 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 263 m²</span>
+                </div>
+
+          <p class="card-description">Ubicada en calle bomplan 145, en una cortada súper tranquila y a metros de la calle Alsina esta casa combina confort amplitud y excelente ubicación. Ideal para aquellos que buscan vivir en una zona céntrica, pero con la tranquilidad de una zona residencial. Al frente nos encontramos con un amplio y moderno garaje quincho, con parrilla, amplia mesada y baño, que puede guardar dos vehículos y una entrada lateral pasante donde puede alojarse dos más. En planta baja, nos encontramos con un living separado, cocina totalmente renovada, comedor diario, lavadero baño modernizado y un dormitorio que puede ser utilizado como escritorio. En planta alta, tres dormitorios con placares, y dos de ellos con balcón, amplio baño con antebaño y ventilación natural. Posee patio delantero y patio trasero. Excelente estado de conservación y ambientes cómodos. Ideal para familias numerosas qué buscan comodidad a pasos del centro. Consultas al 291-6494949</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/78449/Casa-en-Venta-en-Bonpland-145-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/4202cd4a52ccac226b1686929e25019a.jpeg" alt="Casa en Venta en Tucumán 300, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Tucumán 300, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 200.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 250 m²</span>
+                </div>
+
+          <p class="card-description">EN VENTA CASA CON GALPON Hermosa propiedad Tucumán 300 - Bahía Blanca Ingreso tipo galería - amplio living comedor, dos dormitorios, dos baños, cocina con lavadero y fogón Patio con pileta y fogón Compuesta de dos dormitorios, 2 baños, amplio living comedor, ingreso tipo galería. Cocina con lavadero y parrilla. Patio con pileta y parrilla. Galpon de 100 m2 y entrada pasante Posibilidad de alquiler $2.400.000</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/78333/Casa-en-Venta-en-Tucumán-300-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/c103fd6cb47e7eb773146ee76e7331c0.jpeg" alt="Casa en Venta en Patricios 200, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Patricios 200, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 180.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 180 m²</span>
+                </div>
+
+          <p class="card-description">Casa en venta en calle Patricios al 200 Propiedad de amplios y luminosos ambientes, desarrollada en una sola planta. Consta de tres dormitorios, living comedor, sala de estar, cocina, lavadero y tres baños, uno completo, otro de servicio y uno en el quincho. Cuenta con un espacioso garage, patio y quincho con parrilla. Posee además ingreso lateral independiente. Una vivienda funcional y cómoda, ideal para familias que buscan confort y buena ubicación.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/78117/Casa-en-Venta-en-Patricios-200-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/222eb50dfeebdffa6c82fd40d9fdc472.jpeg" alt="Casa en Venta en Patricios 600, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Patricios 600, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 180.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 90 m²</span>
+                </div>
+
+          <p class="card-description">CARLA SERAIN SERVICIOS INMOBILIARIOS VENDE Hermosa casa de dos plantas en pleno macrocentro de Bahía Blanca Ubicación privilegiada, cerca de comercios, colegios y principales accesos. La propiedad se distribuye de la siguiente manera: Planta alta: • 3 dormitorios luminosos • Sala o escritorio ideal para home office • Antebaño y baño completo Planta baja: • Living espacioso y cómodo • Comedor diario • Cocina independiente • Lavadero Además cuenta con: • Garage quincho con parrilla • Patio seco, funcional y de bajo mantenimiento Superficie del lote: 157,40 m² Una excelente oportunidad para quienes buscan confort, ubicación y calidad de vida en Bahía Blanca.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/77799/Casa-en-Venta-en-Patricios-600-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/13b68fa53a148522eddee23ffbe8d056.jpg" alt="Casa en Venta en Berutti 400, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Berutti 400, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 170.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 200 m²</span>
+                </div>
+
+          <p class="card-description">Hermosa propiedad a la venta → Berutti 400 Sup cubierta: 200m² Total Lote: 208m² → hall de ingreso con pisos y aberturas originales → amplio living con estufa hogar → 3 dormitorios con pisos de pinotea → 3 baños → garaje para 1 vehículo → 1 escritorio arriba del garaje (bajo escalera con placard de guardado) → cocina integrada con holgada mesada en &quot;U&quot;, cocina industrial y muchísimo espacio de guardado → living comedor amplio con vista al patio, se puede unificar al patio con abertura de 3 paños plegable. Persianas automatizadas → lavadero separado → patio embaldosado con fogón y baño de servicio ♥ Calefacción por radiadores ♥ Ubicación macrocentro ♥ En frente La Salle (La Inmaculada) ♥ Casa habitada con todos los servicios conectados VENTA EN COMUN CON MIRIAM SERRET</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/77670/Casa-en-Venta-en-Berutti-400-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/979467124b28f0d7b0b6d6a01696bae0.jpeg" alt="Casa en Venta en Villarino 236, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Villarino 236, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 170 m²</span>
+                </div>
+
+          <p class="card-description">*¡OPORTUNIDAD ÚNICA! VENTA DE CASA ANTIGUA EN EXCELENTE ESTADO* *Ubicación:* Villarino 236 *Características:* - *Habitaciones:* 4 amplias habitaciones para toda la familia - *Comedor:* Espacioso comedor con luz natural - *Garage:* Garage con portón levadizo para mayor comodidad - *Patio de luz intermedio:* perfecto para disfrutar de la luz y aire natural en toda la casa. - *Cocina-comedor:* Amplia cocina integrada con comedor. - *Baños:* 2 baños, 1completamente equipados y otro de servicio. Con lavadero al lado. - *Patio:* Amplio patio con áreas secas y de tierra, perfecto para disfrutar al aire libre - *Superficie terrenos:* 9,48 x 36,64. Superficie total 328 mts2. - *Superficie construida:* 170 mts2. - *Clasificación de zona:* código zonificación C2 - FOS 60% - FOT 2,4 - Altura máxima 11 pisos. *Estado:* La casa se encuentra en muy buen estado!! *¡No te pierdas esta oportunidad de tener tu hogar soñado!* Contactanos para más información y para coordinar una visita.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/76734/Casa-en-Venta-en-Villarino-236-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/18c226d406af21334c8600718cb3db3c.jpeg" alt="Casa en Venta en Angel Brunel 400, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Angel Brunel 400, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 180.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 212 m²</span>
+                </div>
+
+          <p class="card-description">Amplia casa en venta con buen entorno verde. Compuesta en planta baja con tres dormitorios, dos baños completos, amplia cocina comedor, living comedor amplio y garage. Habitación con baño en suite. Quincho con baño completo y amplio patio. Se encuentra en perfecto estado de mantenimiento. Sup cubierta: 212 m2 Sup Lote: 330 m2 Acepta permuta por departamentos. Consulta 291 6464164 Alsina 375</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/76697/Casa-en-Venta-en-Angel-Brunel-400-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/a2652147d50b59b48c2be7c7d1c48d9b.jpg" alt="Casa en Venta en Santa Fé Y O&#039;Higgins, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Santa Fé Y O&#039;Higgins, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 170.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                    <span class="tag">📐 208 m²</span>
+                </div>
+
+          <p class="card-description">Filippone Propiedades ofrece en venta hermosa casa en excelente ubicación. Macrocentro, en la esquina de Ohiggins y Santa Fe. A una cuadra de Avda Colón y 5 de la plaza Rivadavia. Su estado es fabuloso. Ideal para aquellas personas que quieran vivir cerca de todo y con poco mantenimiento. Se desarrolla en 2 plantas. Planta baja cuenta con gran living comedor al frente con buenas aberturas, pisos de parquet, cocina separada, 2 dormitorios muy cómodos, baño completo y baño de servicio, garaje cubierto para 2 vehículos con altillo y pequeño patio de luz. En planta alta cuenta con habitación principal en suite, vestidor, hermoso y amplio quincho. Pueden entrar 20 personas aproximadamente y Terraza/solarium. Al ser la propiedad en esquina resulta ser muy luminosa en todos sus ambientes. Calefacción central por radiadores. Posee equipos de aire acondicionados en algunos ambientes, aberturas en madera, todas con persianas. 3d en total y 4 baños. Superficie de lote: 145 mts2 Superficie cubierta: 208 mts2 Superficie descubierta: 30 mts2 Casa muy práctica, muy funcional y en excelente estado. No tenés que hacerle nada, lista para disfrutar a pleno. La zona no fue afectada por la inundación.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/75603/Casa-en-Venta-en-Santa-Fé-Y-OHiggins-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/b1fdf161c85ed79f893e738188e4ecc4.jpg" alt="Casa en Venta en Lamadrid 519 , Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Lamadrid 519 , Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 210.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                      </div>
+
+          <p class="card-description">Vendemos excepcional casa en el macrocentro de la ciudad. Cuenta con 3 Dormitorios, 2 Baños, Gran Living comedor, Cocina comedor diario, Garaje pasante para varios vehiculos. Lote de 10 x 30. Ideal para constructoras!</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/74549/Casa-en-Venta-en-Lamadrid-519-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/f65cb0d6ce6f53392da7df4fba4afbbb.jpeg" alt="Casa en Venta en Fitz Roy 573, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Fitz Roy 573, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 230 m²</span>
+                </div>
+
+          <p class="card-description">Carla serain servicios inmobiliarios VENDE Hermosa casa antigua en el macro centro de la ciudad de bahía blanca. Cuenta en planta baja con un local o salón muy amplio con baño y altillo, con salida a la calle. Hall de entrada con espacio para vehículo, living comedor con hogar. Cocina comedor , quincho con lavadero y fogón, dormitorio de servicio y baño . Planta alta con dos dormitorios y baño completo . Patio verde con árboles frutales y patio seco con fogón . Cualquier consulta, no dudes en contactarnos 2914298756</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/74272/Casa-en-Venta-en-Fitz-Roy-573-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/95a66fd6449e06a0243987cc2d87e595.jpg" alt="Casa en Venta en Ohiggins Y Santa Fe, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Ohiggins Y Santa Fe, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 170.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                    <span class="tag">📐 200 m²</span>
+                </div>
+
+          <p class="card-description">Santa Fe y O higgins.- Propiedad en esquina, desarrollada en dos plantas. En excelente estado de conservación y mantenimiento. PB: Living comedor, muy luminoso con pisos de parquet de pinotea. Cocina separada. Dos amplios dormitorios, Baño completo. Garaje cubierto para dos vehículos. Pequeño patio semi cubierto, baño de servicio y escalera para acceso a quincho. PA: Dormitorio en suite con vestidor. Amplísimo quincho, con baño completo. Bellísima terraza. Calefacción por radiadores. Superficie de lote: 145 mts2 Superficie cubierta: 200 mts2 Superficie descubierta: 30 mts2</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/73373/Casa-en-Venta-en-Ohiggins-Y-Santa-Fe-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/577a393ff88a3a42ab16af903992c9d0.JPG" alt="Casa en Venta en General Paz 310, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en General Paz 310, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 120 m²</span>
+                </div>
+
+          <p class="card-description">Casa en altos, de tres dormitorios, dos baños, living comedor, cocina separada con comedor diario, lavadero y terraza/balcón. IDEAL PROFESIONALES.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/72152/Casa-en-Venta-en-General-Paz-310-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/79c3dc74cf810f88dd4bb5afe6588563.JPG" alt="Casa en Venta en Brown 455, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Brown 455, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 300 m²</span>
+                </div>
+
+          <p class="card-description">Casa en altos de tres dormitorios, tres baños, living comedor, cocina con comedor diario y patio terraza.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/71298/Casa-en-Venta-en-Brown-455-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/bbd2a50e49a7e7d6c49dc4b2a7e8c295.jpg" alt="Casa en Venta en 9 De Julio Y Roca, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en 9 De Julio Y Roca, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 200.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 374 m²</span>
+                </div>
+
+          <p class="card-description">Importante casa en venta, ubicada en calle 9 de Julio, a solo 9 cuadras de Plaza Rivadavia. La misma se encuentra construida sobre un lote de 385 m2, de los cuales 374 m2 aproximadamente están edificados. Se distribuye de la siguiente manera: Al ingresar nos encontramos con un amplio living, (por el cual se puede circular hacia la zona de comedor y cocina y hacia los dormitorios), comedor, amplia cocina separada (la cual cuenta con un espacio pequeño con segunda cocina con bacha y lavadero independiente), 3 dormitorios, vestidor, baño completo, segundo baño con box de ducha, jardín de invierno, garaje cubierto para 2 vehículos con fogón, patio y amplio quincho. Detalles: - Excelente calidad de construcción. - Termotanque de 130 litros. - Calefacción central en toda la propiedad. - 3 aires acondicionados frío/calor (los ambientes que cuentan con aire son: comedor, dormitorio principal y jardín de invierno). - 374 m2 cubiertos. - 385 m2 totales. Consultanos al (291) 6489728 o al (2923) 448821.-</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/70982/Casa-en-Venta-en-9-De-Julio-Y-Roca-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/8f4057d772f5fa47f001d1ed61d4f2f6.jpg" alt="Casa en Venta en SAN LUIS 96, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en SAN LUIS 96, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 195.000
+          </div>
+
+    <div class="card-tags">
+                          <span class="tag">📐 1,200 m²</span>
+                </div>
+
+          <p class="card-description">¡GRAN LOTE CON CONSTRUCCIONES EN VENTA! Ubicado en San Luis esq. Av Cerri una zona ideal para realizar un desarrollo inmobiliario -Al frente nos encontramos con un deposito de 100m2 más dependencias -Amplio quincho con patio verde Ambas casas con acceso independiente, cuentan con: -Living -Cocina comedor -2 dormitorios -Baño -Lavadero con patio de luz ¡Desde Scolari Rio Construcción podemos acompañarte en el diseño del proyecto y la construcción del mismo! USD 195.000 ¡Una oportunidad increíble! Contactanos</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/70661/Casa-en-Venta-en-SAN-LUIS-96-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/267ae78bc40618dccf037df583e30c63.jpeg" alt="Casa en Venta en España 581, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en España 581, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 189 m²</span>
+                </div>
+
+          <p class="card-description">Casa de 3 dormitorios, living, comedor, cocina, 2 baños, lavadero, patio con fogón y garage.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/68298/Casa-en-Venta-en-España-581-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/91153740b748bfd8572989dec04816cd.png" alt="Casa en Venta en Lavalle 487, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Lavalle 487, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 220.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 5 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 366 m²</span>
+                </div>
+
+          <p class="card-description">ATENCION RESIDENCIA, INSTITUTO, etc!! a 4 CUADRAS DEL TEATRO MUNICIPAL!! Lavalle 400 lote de 255 m2. Puede dividirse en dos propiedades fácilmente. IMPORTANTE INMUEBLE EN EXCELENTE ESTADO!! con PATIO, GARAGE Y TERRAZA - 7 DORMITORIOS Y 3 BAÑOS. MUY BUEN SECTOR!! Planta baja: Living comedor amplio, cocina separada muy cómoda , comedor diario con vista al patio, baño de servicio, lavadero separado. Sector de guardado. Dos dormitorios con placares. Baño principal completo. Patio seco mediano. Garaje (apto camioneta) con portón corredizo . Planta alta: gran ambiente distribuidor . Cinco dormitorios amplios. Dos baños con ante baño. Escritorio. Play -room . Patio de luz. Valor: u$s 220.000 Contacto: 2914146953 / 2914135187 María T. Narváez Servicios Inmobiliarios.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/68226/Casa-en-Venta-en-Lavalle-487-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/b8f66be0b3e09f0313f81e718de14b20.jpeg" alt="Casa en Venta en Salta 745, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Salta 745, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 200.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 160 m²</span>
+                </div>
+
+          <p class="card-description">V E N T A —————-&gt;&gt; SALTA 745 A metros del paseo de las esculturas y de ALEM al 800 3 habitaciones, una en suite Gran living comedor Cocina separada Entrada para varios autos Portón automático Cocina con parrilla interna. Excelente estado de la Canal Bienes Raíces 4536638 2️⃣9️⃣1️⃣4️⃣7️⃣1️⃣1️⃣8️⃣3️⃣0️⃣ VENTA EN COMUN CON PAULA MARCOS PROPIEDADES</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/66653/Casa-en-Venta-en-Salta-745-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/90321178df8441aca9bbe96934bec26a.jpeg" alt="Casa en Venta en Saavedra 491, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Saavedra 491, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 5 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                    <span class="tag">📐 235 m²</span>
+                </div>
+
+          <p class="card-description">Casa en dos plantas en la esquina de Saavedra y Villarino PB: Hall de entrada, living, comedor,escritorio, cocina-comedor baño garage y patio chico. PA: 5 dormitorios (1 en suite), 3 baños. Terraza con deposito y lavadero.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/64786/Casa-en-Venta-en-Saavedra-491-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/8c04356a298efbd2df61e7d6143be491.jpeg" alt="Casa en Venta en España 475, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en España 475, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 120.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 5 dorm.</span>
+                    <span class="tag">🚿 1 baños</span>
+                    <span class="tag">📐 172 m²</span>
+                </div>
+
+          <p class="card-description">CASA EN VENTA ESPAÑA 475 (CENTRO ): Casa antigua de 3/4 dormi, hall de ingreso, cocina comedor, living comedor, garaje con altillo (hoy utilizado como dormitorio), patio verde con pileta, depósito de guardado, lavadero/ quincho con parrilla, baño completo. Total de superficie: 265m². Superficie cubierta: 172m². Valor: U$S120.000</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/64348/Casa-en-Venta-en-España-475-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/26f7bb2d95d91ef5679499f775be6d92.jpeg" alt="Casa en Venta en O&#039;higgins Y Santa Fe, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en O&#039;higgins Y Santa Fe, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 170.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                    <span class="tag">📐 230 m²</span>
+                </div>
+
+          <p class="card-description">Importante propiedad en el macrocentro de la ciudad Calle O&#039;higgins y Santa Fé. Hermosa casa distribuida en 2 plantas. PLANTA BAJA: Hall de ingreso, living, comedor, cocina amplia reciclada, 2 dormitorios, 1 baño completo, garaje, pequeño patio interno, lavadero y baño de servicio. Calefacción por radiadores. Muchos placares y bauleras. PLANTA ALTA: Dormitorio principal con baño en suite y vestidor, 2 balcones, quincho grande y moderno ,con parrilla, barra y aire acondicionado,1 baño completo, amplia terraza. La casa se encuentra en IMPECABLE estado. *Aceptan permuta por casa mas pequeña, toda en PB y de menor valor. En barrios Pedro Pico y San Martin preferentemente*</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/61530/Casa-en-Venta-en-Ohiggins-Y-Santa-Fe-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/7ee329ef7869e07bf4f67e0de10b7c68.jpeg" alt="Casa en Venta en Brown 1068, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Brown 1068, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 140.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 350 m²</span>
+                </div>
+
+          <p class="card-description">Chalet en Venta + Galpón a refaccionar. Valor: u$ 140.000.- Sup. Cub.: 350 m2, Lote: 10.5 x 49. Apto. Crédito ! Planta baja: hall de entrada, amplio living comedor al frente, comedor diario, cocina y lavadero. 2 dormitorios y 2 baños (uno completo con ante baño, otro de recepción). Entrada pasante de autos hasta el fondo y cubierta. Patio dividido, uno con la casa y portón, otro adelante de un galpón de 10.5 x 20. Ideal para trabajar y vivir ! Planta alta: escritorio, 1 dormitorio en suite (baño con ante baño, ventilación natural), salida del dorm a gran terraza ! Brown 1000 (cuadra comercial ) Consultas: 0291 15-460-2616⁩ / 291-4120609.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/59631/Casa-en-Venta-en-Brown-1068-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/55880fdf2ddc9ea5331b015f626d9050.jpeg" alt="Casa en Venta en Casanova 8, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Casanova 8, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 200.000
+          </div>
+
+    <div class="card-tags">
+                          <span class="tag">📐 201 m²</span>
+                </div>
+
+          <p class="card-description">Este impresionante inmueble se encuentra ubicado en Bahía Blanca, Buenos Aires, un lugar maravilloso con todas las comodidades a tu disposición. Está rodeado de centros comerciales, colegios y universidades, por lo que la message de entretenimiento y educación está garantizada. Esta área particularmente cuenta con un terreno de 201M2. La casa se encuentra a demoler Esta oferta en el mercado inmobiliario es una increíble oportunidad para que tengas tu lugar ideal para vivir. Podrás disfrutar de todas las comodidades de la zona sin renunciar a la privacidad que desees. ¡No pierdas la oportunidad y reserva tu visita hoy!</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/56057/Casa-en-Venta-en-Casanova-8-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/1cb4ae5bcc7cbeb5649f3327dac2041d.jpg" alt="Casa en Venta en Las Heras 500, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Las Heras 500, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 4 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                      </div>
+
+          <p class="card-description">Casa de dos plantas, compuesta por living comedor, cocina comedor y lavadero separado. Tiene 4 dormitorios, biblioteca y 2 baños, 1 en cada planta. Con patio y garaje</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/48343/Casa-en-Venta-en-Las-Heras-500-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/60b94e23bb9bb1ae6d968abca8727b04.jpeg" alt="Casa en Venta en Undiano 504, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Undiano 504, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+                            </div>
+
+          <p class="card-description">Propiedad ideal para emprendimiento comercial!!!! Frente sobre calle Undiano 16mts y sobre calle Thompson 8.66mts Sup total 138mts2.-</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/46838/Casa-en-Venta-en-Undiano-504-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/8d5f5a28d2863ac09c4256041f8a9525.jpg" alt="Casa en Venta en Caronti 200, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Caronti 200, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 4 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                      </div>
+
+          <p class="card-description">Casa de 4 dormitorios, 2 baños, living-comedor, cocina separada, lavadero, garage doble y patio. Apta para uso profesional.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/42671/Casa-en-Venta-en-Caronti-200-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/45595f3f26e28cac0760d30cbf089804.jpeg" alt="Casa en Venta en 19 De Mayo 63, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en 19 De Mayo 63, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 200.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 186 m²</span>
+                </div>
+
+          <p class="card-description">La casa se encuentra construida sobre un lote de 297 m2, con 10,55m de frente x 29,62m de fondo y una superficie cubierta de 186m2. Zona de edificación R1. Consta de: - Una sala de estar muy amplia con chimenea. - Dos dormitorios principales, una habitación de servicio y un escritorio. -Una cocina comedor. -Un baño principal y un baño de servicio. -Un patio amplio. -Una terraza. -Un sótano. La casa se encuentra en una ubicación estratégica y es apta para múltiples destinos. Actualmente es utilizada como consultorios médicos. Consultas a Área ventas 291 523 9314</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/41369/Casa-en-Venta-en-19-De-Mayo-63-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/6487a88fc7f6f1be10ac94f95dbe7eab.png" alt="Casa en Venta en 25 De Mayo 83, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en 25 De Mayo 83, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 120.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 200 m²</span>
+                </div>
+
+          <p class="card-description">CASA ANTIGUA EN VENTA - 25 DE MAYO 83 Casa desarrollada totalmente en planta baja. Compuesta por hall de ingreso (pequeño living) con salida a patio de luz. Amplio dormitorio al frente (en estado original). Cocina alargada integrada por barra a comedor. Pasillo de distribución a sector privado: dormitorio amplio con placard, baño completo con bañera, dormitorio con baño de servicio. Garaje cubierto pasante (para tres vehículos). Patio y lavadero. Sobre el fondo del lote, cuenta con departamento en planta alta, con pequeña cocina y baño. Lote de 10 x 25, con 200 m2 cubiertos aprox. Calefacción por calefactores. Cañerías de gas y agua remodeladas hace 20 años aproximadamente.- Evalúan permuta por menor valor.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/39238/Casa-en-Venta-en-25-De-Mayo-83-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/e8c3e65f9f454cddd8490307d76c8664.jpg" alt="Casa en Venta en Pasaje Husares 460, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Pasaje Husares 460, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 4 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                      </div>
+
+          <p class="card-description">Casa de cuatro dormitorios, cuatro baños, living, cocina con comedor, lavadero, garage, y patio</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/36759/Casa-en-Venta-en-Pasaje-Husares-460-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/5452aae9c46b8b6782a4cf6846edcce5.jpg" alt="Casa en Venta en Beruti 494, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Beruti 494, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 160.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 4 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 140 m²</span>
+                </div>
+
+          <p class="card-description">Casa: Planta baja, Entrada por calle Beruti, 3 ambientes, cochera para dos autos, 130 mts2.- Departamento: Entrada por la calle Villarino, Primer piso, 3 ambientes, patio/balcón, 70 mts2.- (ingresos, agua y electricidad independientes) Expediente de subdivisión en trámite, venta en block</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/28487/Casa-en-Venta-en-Beruti-494-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/085f75887b47929ef648c674dbb6c5b8.jpg" alt="Casa en Venta en Roca 100, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Roca 100, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                      </div>
+
+          <p class="card-description">Hermosa casa interna de 140 mt2 cubiertos, tres dormitorios, dos baños, patio y quincho.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/27867/Casa-en-Venta-en-Roca-100-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card is-new ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/2866b6368181610bfa3abb64c524517a.JPG" alt="Casa en Venta en Brown 1638, Bahia Blanca, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+              <span class="badge badge-new">Nueva</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Brown 1638, Bahia Blanca, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 150.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                    <span class="tag">📐 480 m²</span>
+                </div>
+
+          <p class="card-description">Venta Casa+ Galpón. Salida a 2 calles. Brown 1600 Excelente propiedad ubicada sobre Brown al 1600, con salida a calle Capitán Martinez.- Casa: con entrada independiente por Brown, compuesta por 3d, living, comedor, cocina, estar, baño, patio con pileta y gge p/2 autos.- Galpón: con entrada independiente Sobre Capitán Martinez de 17.20 x 6.32 con 2 oficinas y 3 baños (alquilado).- Se trata de un inmueble conformado por un lote de 9,1m de frente por 56m de fondo. Superficie total: 480m2.- Ubicación ideal para emprendimiento comercial, a metros de la Terminal de ómnibus de la ciudad.- Posibilidad de tomar algún departamento en Bahía Blanca, Monte Hermoso o Mar del Plata.- Consultas: Filippone Propiedades (291 154051284/2914728963)</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/9603/Casa-en-Venta-en-Brown-1638-Bahia-Blanca-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+      </div>
+  
+  <h2 class="section-title">Todas las propiedades</h2>
+
+    <div class="grid">
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/8fdc7e69f7f6fbc970b19df90e2da4e8.jpg" alt="Casa en Venta en Avenida Colon 635, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Avenida Colon 635, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 5 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                      </div>
+
+          <p class="card-description">Casa en venta sobre Avenida Colón Una propiedad amplia, funcional y lista para disfrutar en una excelente ubicación. Características principales: 5 dormitorios con amplios placares 2 baños Cocina funcional con buen espacio de guardado Living cómodo y luminoso Comedor independiente Lavadero separado Patio ideal para disfrutar al aire libre Amplio balcón con excelente ventilación Garage Calefacción para mayor confort</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/83413/Casa-en-Venta-en-Avenida-Colon-635-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/3482b05b3d64ddf910af7b631d2f4775.jpeg" alt="Casa en Venta en Chile 215, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Chile 215, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 155.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 129 m²</span>
+                </div>
+
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/82732/Casa-en-Venta-en-Chile-215-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/a6bfb7b9ce1f2058c7682813622bcc80.png" alt="Casa en Venta en Blandengues 785 , Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Blandengues 785 , Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 168.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 4 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                      </div>
+
+          <p class="card-description">Casa en Venta Multifamiliar Ingreso por cochera profunda para hasta 3 vehiculos también puede ser usada como patio seco con canteros 1° Vivienda + Dos dormitorios, + Baño Completo + Living Comedor con cocina integrada + Oficina con baño tipo toilette + Quincho en 1° piso por escalera con parrilla 2° Vivienda + Un Dormitorio con placares empotrados + Living Comedor + Cocina Separada por puerta granero + Baño al fondo completo con ducha + Pequeño patio con parrilla 3° Vivienda (LOCAL) + Local al frente con cortina metalica enrollable + EN PRIMER PISO + Dos Habitaciones + Una pequeña estilo oficina + Otra grande estilo dormitorio o posible deposito + Baño sencillo tipo toilette Cualquier Consulta Por medidas o para coordinar visitas consultar al 2914393908 2915038128</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/82389/Casa-en-Venta-en-Blandengues-785-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/3bac90bda31a2fa0f5bef9f3646af989.jpg" alt="Casa en Venta en Vieytes 678, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Vieytes 678, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                    <span class="tag">📐 256 m²</span>
+                </div>
+
+          <p class="card-description">Esta propiedad se desarrolla sobre un lote de 300 m², con una superficie cubierta de 256 m², destacándose por sus ambientes amplios, distribución funcional y muy buen nivel de equipamiento. La vivienda cuenta con una organización cómoda y bien definida: 3 dormitorios en suite 4 baños Living Cocina separada Comedor independiente Lavadero 6 aires acondicionados Sistema de alarma con monitoreo Patio verde con riego por aspersión y por goteo Cochera propia Quincho, ideal para reuniones y disfrute.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/81714/Casa-en-Venta-en-Vieytes-678-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/b6bc0a46cc61f8ee19a09fb145e9f2b9.jpg" alt="Casa en Venta en Rodriguez 400, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Rodriguez 400, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 4 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                      </div>
+
+          <p class="card-description">364 m² cubiertos de excelente calidad constructiva Desarrollada en tres plantas -Planta baja: Recepcion Living amplio Cocina comedor integrada Baño de recepción Garage doble con portón automático Lavadero independiente Patio con pileta climatizada, cascada y parrilla - Primer piso: 4 dormitorios, el principal en suite con jacuzzi y vestidor, y los otros 3 con placard, uno de ellos con balcon aterrazado. - Segundo piso: Gran quincho con parrilla Cocina completa Baño Amplia terraza al contrafrente y balcon al frente Todas las plantas poseen aires acondicionados</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/80757/Casa-en-Venta-en-Rodriguez-400-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/6a488193e445cdcf357de6dc6fee27e4.png" alt="Casa en Venta en España 600, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en España 600, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 120.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 154 m²</span>
+                </div>
+
+          <p class="card-description">Nuevo Ingreso – Chalet 3 dormitorios / 3 baños Una propiedad amplia, funcional y lista para disfrutar. La casa cuenta con: • Living comedor luminoso • Cocina amplia • 2 dormitorios (uno con baño en suite) • 2 baños completos • Garage para auto mediano • Patio seco • Ventiladores de techo • Alarma + 8 cámaras de seguridad • Varios espacios de guardado Además, un quincho independiente con habitación y baño completo: ideal para invitados, hobbies o trabajo. 154 m² cubiertos Una opción cómoda, bien distribuida y pensada para vivir con tranquilidad. Consultanos para más info o coordinar una visita. Ares Inversiones Inmobiliarias – Tu próximo hogar te está esperando.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/80305/Casa-en-Venta-en-España-600-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/979621dce6027448300c394080f4a656.jpg" alt="Casa en Venta en Rondeau 742, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Rondeau 742, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 323 m²</span>
+                </div>
+
+          <p class="card-description">Se vende importante propiedad con cuadra de panaderia, Superficie del Lote 433 m2, Superficie Construida 323 m2. No posee gas. Ideal para inversores. SI estas interesado comunicate al 4522431 / 4536624 de lunes a viernes de 9.00 a 16.00.-</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/79417/Casa-en-Venta-en-Rondeau-742-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/536b863f360a897eea29b993f3badc68.jpg" alt="Casa en Venta en Donado 800, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Donado 800, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 130.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                      </div>
+
+          <p class="card-description">Vendemos Donado 800 casa en venta distribuida en dos plantas Planta baja: hall de entrada, living, cocina comedor con parrilla en la cocina, 1 dormitorio, baño completo, escritorio, gge y patio chico Planta alta: 2 dormitorios, baño , playroom Valor 130.000 uss Evaluamos permuta por Dpto 2 dorm con cochera céntrico</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/79132/Casa-en-Venta-en-Donado-800-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/c463c4c6e2d730376505b8b9f15e7905.jpg" alt="Casa en Venta en Bonpland 145, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Bonpland 145, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 245.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 4 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 263 m²</span>
+                </div>
+
+          <p class="card-description">Ubicada en calle bomplan 145, en una cortada súper tranquila y a metros de la calle Alsina esta casa combina confort amplitud y excelente ubicación. Ideal para aquellos que buscan vivir en una zona céntrica, pero con la tranquilidad de una zona residencial. Al frente nos encontramos con un amplio y moderno garaje quincho, con parrilla, amplia mesada y baño, que puede guardar dos vehículos y una entrada lateral pasante donde puede alojarse dos más. En planta baja, nos encontramos con un living separado, cocina totalmente renovada, comedor diario, lavadero baño modernizado y un dormitorio que puede ser utilizado como escritorio. En planta alta, tres dormitorios con placares, y dos de ellos con balcón, amplio baño con antebaño y ventilación natural. Posee patio delantero y patio trasero. Excelente estado de conservación y ambientes cómodos. Ideal para familias numerosas qué buscan comodidad a pasos del centro. Consultas al 291-6494949</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/78449/Casa-en-Venta-en-Bonpland-145-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/4202cd4a52ccac226b1686929e25019a.jpeg" alt="Casa en Venta en Tucumán 300, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Tucumán 300, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 200.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 250 m²</span>
+                </div>
+
+          <p class="card-description">EN VENTA CASA CON GALPON Hermosa propiedad Tucumán 300 - Bahía Blanca Ingreso tipo galería - amplio living comedor, dos dormitorios, dos baños, cocina con lavadero y fogón Patio con pileta y fogón Compuesta de dos dormitorios, 2 baños, amplio living comedor, ingreso tipo galería. Cocina con lavadero y parrilla. Patio con pileta y parrilla. Galpon de 100 m2 y entrada pasante Posibilidad de alquiler $2.400.000</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/78333/Casa-en-Venta-en-Tucumán-300-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/c103fd6cb47e7eb773146ee76e7331c0.jpeg" alt="Casa en Venta en Patricios 200, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Patricios 200, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 180.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 180 m²</span>
+                </div>
+
+          <p class="card-description">Casa en venta en calle Patricios al 200 Propiedad de amplios y luminosos ambientes, desarrollada en una sola planta. Consta de tres dormitorios, living comedor, sala de estar, cocina, lavadero y tres baños, uno completo, otro de servicio y uno en el quincho. Cuenta con un espacioso garage, patio y quincho con parrilla. Posee además ingreso lateral independiente. Una vivienda funcional y cómoda, ideal para familias que buscan confort y buena ubicación.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/78117/Casa-en-Venta-en-Patricios-200-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/222eb50dfeebdffa6c82fd40d9fdc472.jpeg" alt="Casa en Venta en Patricios 600, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Patricios 600, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 180.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 90 m²</span>
+                </div>
+
+          <p class="card-description">CARLA SERAIN SERVICIOS INMOBILIARIOS VENDE Hermosa casa de dos plantas en pleno macrocentro de Bahía Blanca Ubicación privilegiada, cerca de comercios, colegios y principales accesos. La propiedad se distribuye de la siguiente manera: Planta alta: • 3 dormitorios luminosos • Sala o escritorio ideal para home office • Antebaño y baño completo Planta baja: • Living espacioso y cómodo • Comedor diario • Cocina independiente • Lavadero Además cuenta con: • Garage quincho con parrilla • Patio seco, funcional y de bajo mantenimiento Superficie del lote: 157,40 m² Una excelente oportunidad para quienes buscan confort, ubicación y calidad de vida en Bahía Blanca.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/77799/Casa-en-Venta-en-Patricios-600-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/13b68fa53a148522eddee23ffbe8d056.jpg" alt="Casa en Venta en Berutti 400, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Berutti 400, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 170.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 200 m²</span>
+                </div>
+
+          <p class="card-description">Hermosa propiedad a la venta → Berutti 400 Sup cubierta: 200m² Total Lote: 208m² → hall de ingreso con pisos y aberturas originales → amplio living con estufa hogar → 3 dormitorios con pisos de pinotea → 3 baños → garaje para 1 vehículo → 1 escritorio arriba del garaje (bajo escalera con placard de guardado) → cocina integrada con holgada mesada en &quot;U&quot;, cocina industrial y muchísimo espacio de guardado → living comedor amplio con vista al patio, se puede unificar al patio con abertura de 3 paños plegable. Persianas automatizadas → lavadero separado → patio embaldosado con fogón y baño de servicio ♥ Calefacción por radiadores ♥ Ubicación macrocentro ♥ En frente La Salle (La Inmaculada) ♥ Casa habitada con todos los servicios conectados VENTA EN COMUN CON MIRIAM SERRET</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/77670/Casa-en-Venta-en-Berutti-400-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/979467124b28f0d7b0b6d6a01696bae0.jpeg" alt="Casa en Venta en Villarino 236, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Villarino 236, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 170 m²</span>
+                </div>
+
+          <p class="card-description">*¡OPORTUNIDAD ÚNICA! VENTA DE CASA ANTIGUA EN EXCELENTE ESTADO* *Ubicación:* Villarino 236 *Características:* - *Habitaciones:* 4 amplias habitaciones para toda la familia - *Comedor:* Espacioso comedor con luz natural - *Garage:* Garage con portón levadizo para mayor comodidad - *Patio de luz intermedio:* perfecto para disfrutar de la luz y aire natural en toda la casa. - *Cocina-comedor:* Amplia cocina integrada con comedor. - *Baños:* 2 baños, 1completamente equipados y otro de servicio. Con lavadero al lado. - *Patio:* Amplio patio con áreas secas y de tierra, perfecto para disfrutar al aire libre - *Superficie terrenos:* 9,48 x 36,64. Superficie total 328 mts2. - *Superficie construida:* 170 mts2. - *Clasificación de zona:* código zonificación C2 - FOS 60% - FOT 2,4 - Altura máxima 11 pisos. *Estado:* La casa se encuentra en muy buen estado!! *¡No te pierdas esta oportunidad de tener tu hogar soñado!* Contactanos para más información y para coordinar una visita.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/76734/Casa-en-Venta-en-Villarino-236-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/18c226d406af21334c8600718cb3db3c.jpeg" alt="Casa en Venta en Angel Brunel 400, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Angel Brunel 400, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 180.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 212 m²</span>
+                </div>
+
+          <p class="card-description">Amplia casa en venta con buen entorno verde. Compuesta en planta baja con tres dormitorios, dos baños completos, amplia cocina comedor, living comedor amplio y garage. Habitación con baño en suite. Quincho con baño completo y amplio patio. Se encuentra en perfecto estado de mantenimiento. Sup cubierta: 212 m2 Sup Lote: 330 m2 Acepta permuta por departamentos. Consulta 291 6464164 Alsina 375</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/76697/Casa-en-Venta-en-Angel-Brunel-400-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/a2652147d50b59b48c2be7c7d1c48d9b.jpg" alt="Casa en Venta en Santa Fé Y O&#039;Higgins, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Santa Fé Y O&#039;Higgins, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 170.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                    <span class="tag">📐 208 m²</span>
+                </div>
+
+          <p class="card-description">Filippone Propiedades ofrece en venta hermosa casa en excelente ubicación. Macrocentro, en la esquina de Ohiggins y Santa Fe. A una cuadra de Avda Colón y 5 de la plaza Rivadavia. Su estado es fabuloso. Ideal para aquellas personas que quieran vivir cerca de todo y con poco mantenimiento. Se desarrolla en 2 plantas. Planta baja cuenta con gran living comedor al frente con buenas aberturas, pisos de parquet, cocina separada, 2 dormitorios muy cómodos, baño completo y baño de servicio, garaje cubierto para 2 vehículos con altillo y pequeño patio de luz. En planta alta cuenta con habitación principal en suite, vestidor, hermoso y amplio quincho. Pueden entrar 20 personas aproximadamente y Terraza/solarium. Al ser la propiedad en esquina resulta ser muy luminosa en todos sus ambientes. Calefacción central por radiadores. Posee equipos de aire acondicionados en algunos ambientes, aberturas en madera, todas con persianas. 3d en total y 4 baños. Superficie de lote: 145 mts2 Superficie cubierta: 208 mts2 Superficie descubierta: 30 mts2 Casa muy práctica, muy funcional y en excelente estado. No tenés que hacerle nada, lista para disfrutar a pleno. La zona no fue afectada por la inundación.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/75603/Casa-en-Venta-en-Santa-Fé-Y-OHiggins-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/b1fdf161c85ed79f893e738188e4ecc4.jpg" alt="Casa en Venta en Lamadrid 519 , Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Lamadrid 519 , Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 210.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                      </div>
+
+          <p class="card-description">Vendemos excepcional casa en el macrocentro de la ciudad. Cuenta con 3 Dormitorios, 2 Baños, Gran Living comedor, Cocina comedor diario, Garaje pasante para varios vehiculos. Lote de 10 x 30. Ideal para constructoras!</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/74549/Casa-en-Venta-en-Lamadrid-519-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/f65cb0d6ce6f53392da7df4fba4afbbb.jpeg" alt="Casa en Venta en Fitz Roy 573, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Fitz Roy 573, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 230 m²</span>
+                </div>
+
+          <p class="card-description">Carla serain servicios inmobiliarios VENDE Hermosa casa antigua en el macro centro de la ciudad de bahía blanca. Cuenta en planta baja con un local o salón muy amplio con baño y altillo, con salida a la calle. Hall de entrada con espacio para vehículo, living comedor con hogar. Cocina comedor , quincho con lavadero y fogón, dormitorio de servicio y baño . Planta alta con dos dormitorios y baño completo . Patio verde con árboles frutales y patio seco con fogón . Cualquier consulta, no dudes en contactarnos 2914298756</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/74272/Casa-en-Venta-en-Fitz-Roy-573-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/95a66fd6449e06a0243987cc2d87e595.jpg" alt="Casa en Venta en Ohiggins Y Santa Fe, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Ohiggins Y Santa Fe, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 170.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                    <span class="tag">📐 200 m²</span>
+                </div>
+
+          <p class="card-description">Santa Fe y O higgins.- Propiedad en esquina, desarrollada en dos plantas. En excelente estado de conservación y mantenimiento. PB: Living comedor, muy luminoso con pisos de parquet de pinotea. Cocina separada. Dos amplios dormitorios, Baño completo. Garaje cubierto para dos vehículos. Pequeño patio semi cubierto, baño de servicio y escalera para acceso a quincho. PA: Dormitorio en suite con vestidor. Amplísimo quincho, con baño completo. Bellísima terraza. Calefacción por radiadores. Superficie de lote: 145 mts2 Superficie cubierta: 200 mts2 Superficie descubierta: 30 mts2</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/73373/Casa-en-Venta-en-Ohiggins-Y-Santa-Fe-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/577a393ff88a3a42ab16af903992c9d0.JPG" alt="Casa en Venta en General Paz 310, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en General Paz 310, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 120 m²</span>
+                </div>
+
+          <p class="card-description">Casa en altos, de tres dormitorios, dos baños, living comedor, cocina separada con comedor diario, lavadero y terraza/balcón. IDEAL PROFESIONALES.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/72152/Casa-en-Venta-en-General-Paz-310-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/79c3dc74cf810f88dd4bb5afe6588563.JPG" alt="Casa en Venta en Brown 455, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Brown 455, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 300 m²</span>
+                </div>
+
+          <p class="card-description">Casa en altos de tres dormitorios, tres baños, living comedor, cocina con comedor diario y patio terraza.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/71298/Casa-en-Venta-en-Brown-455-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/bbd2a50e49a7e7d6c49dc4b2a7e8c295.jpg" alt="Casa en Venta en 9 De Julio Y Roca, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en 9 De Julio Y Roca, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 200.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 374 m²</span>
+                </div>
+
+          <p class="card-description">Importante casa en venta, ubicada en calle 9 de Julio, a solo 9 cuadras de Plaza Rivadavia. La misma se encuentra construida sobre un lote de 385 m2, de los cuales 374 m2 aproximadamente están edificados. Se distribuye de la siguiente manera: Al ingresar nos encontramos con un amplio living, (por el cual se puede circular hacia la zona de comedor y cocina y hacia los dormitorios), comedor, amplia cocina separada (la cual cuenta con un espacio pequeño con segunda cocina con bacha y lavadero independiente), 3 dormitorios, vestidor, baño completo, segundo baño con box de ducha, jardín de invierno, garaje cubierto para 2 vehículos con fogón, patio y amplio quincho. Detalles: - Excelente calidad de construcción. - Termotanque de 130 litros. - Calefacción central en toda la propiedad. - 3 aires acondicionados frío/calor (los ambientes que cuentan con aire son: comedor, dormitorio principal y jardín de invierno). - 374 m2 cubiertos. - 385 m2 totales. Consultanos al (291) 6489728 o al (2923) 448821.-</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/70982/Casa-en-Venta-en-9-De-Julio-Y-Roca-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/8f4057d772f5fa47f001d1ed61d4f2f6.jpg" alt="Casa en Venta en SAN LUIS 96, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en SAN LUIS 96, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 195.000
+          </div>
+
+    <div class="card-tags">
+                          <span class="tag">📐 1,200 m²</span>
+                </div>
+
+          <p class="card-description">¡GRAN LOTE CON CONSTRUCCIONES EN VENTA! Ubicado en San Luis esq. Av Cerri una zona ideal para realizar un desarrollo inmobiliario -Al frente nos encontramos con un deposito de 100m2 más dependencias -Amplio quincho con patio verde Ambas casas con acceso independiente, cuentan con: -Living -Cocina comedor -2 dormitorios -Baño -Lavadero con patio de luz ¡Desde Scolari Rio Construcción podemos acompañarte en el diseño del proyecto y la construcción del mismo! USD 195.000 ¡Una oportunidad increíble! Contactanos</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/70661/Casa-en-Venta-en-SAN-LUIS-96-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/267ae78bc40618dccf037df583e30c63.jpeg" alt="Casa en Venta en España 581, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en España 581, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 189 m²</span>
+                </div>
+
+          <p class="card-description">Casa de 3 dormitorios, living, comedor, cocina, 2 baños, lavadero, patio con fogón y garage.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/68298/Casa-en-Venta-en-España-581-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/91153740b748bfd8572989dec04816cd.png" alt="Casa en Venta en Lavalle 487, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Lavalle 487, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 220.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 5 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 366 m²</span>
+                </div>
+
+          <p class="card-description">ATENCION RESIDENCIA, INSTITUTO, etc!! a 4 CUADRAS DEL TEATRO MUNICIPAL!! Lavalle 400 lote de 255 m2. Puede dividirse en dos propiedades fácilmente. IMPORTANTE INMUEBLE EN EXCELENTE ESTADO!! con PATIO, GARAGE Y TERRAZA - 7 DORMITORIOS Y 3 BAÑOS. MUY BUEN SECTOR!! Planta baja: Living comedor amplio, cocina separada muy cómoda , comedor diario con vista al patio, baño de servicio, lavadero separado. Sector de guardado. Dos dormitorios con placares. Baño principal completo. Patio seco mediano. Garaje (apto camioneta) con portón corredizo . Planta alta: gran ambiente distribuidor . Cinco dormitorios amplios. Dos baños con ante baño. Escritorio. Play -room . Patio de luz. Valor: u$s 220.000 Contacto: 2914146953 / 2914135187 María T. Narváez Servicios Inmobiliarios.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/68226/Casa-en-Venta-en-Lavalle-487-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/b8f66be0b3e09f0313f81e718de14b20.jpeg" alt="Casa en Venta en Salta 745, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Salta 745, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 200.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 160 m²</span>
+                </div>
+
+          <p class="card-description">V E N T A —————-&gt;&gt; SALTA 745 A metros del paseo de las esculturas y de ALEM al 800 3 habitaciones, una en suite Gran living comedor Cocina separada Entrada para varios autos Portón automático Cocina con parrilla interna. Excelente estado de la Canal Bienes Raíces 4536638 2️⃣9️⃣1️⃣4️⃣7️⃣1️⃣1️⃣8️⃣3️⃣0️⃣ VENTA EN COMUN CON PAULA MARCOS PROPIEDADES</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/66653/Casa-en-Venta-en-Salta-745-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/90321178df8441aca9bbe96934bec26a.jpeg" alt="Casa en Venta en Saavedra 491, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Saavedra 491, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 5 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                    <span class="tag">📐 235 m²</span>
+                </div>
+
+          <p class="card-description">Casa en dos plantas en la esquina de Saavedra y Villarino PB: Hall de entrada, living, comedor,escritorio, cocina-comedor baño garage y patio chico. PA: 5 dormitorios (1 en suite), 3 baños. Terraza con deposito y lavadero.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/64786/Casa-en-Venta-en-Saavedra-491-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/8c04356a298efbd2df61e7d6143be491.jpeg" alt="Casa en Venta en España 475, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en España 475, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 120.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 5 dorm.</span>
+                    <span class="tag">🚿 1 baños</span>
+                    <span class="tag">📐 172 m²</span>
+                </div>
+
+          <p class="card-description">CASA EN VENTA ESPAÑA 475 (CENTRO ): Casa antigua de 3/4 dormi, hall de ingreso, cocina comedor, living comedor, garaje con altillo (hoy utilizado como dormitorio), patio verde con pileta, depósito de guardado, lavadero/ quincho con parrilla, baño completo. Total de superficie: 265m². Superficie cubierta: 172m². Valor: U$S120.000</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/64348/Casa-en-Venta-en-España-475-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/26f7bb2d95d91ef5679499f775be6d92.jpeg" alt="Casa en Venta en O&#039;higgins Y Santa Fe, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en O&#039;higgins Y Santa Fe, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 170.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                    <span class="tag">📐 230 m²</span>
+                </div>
+
+          <p class="card-description">Importante propiedad en el macrocentro de la ciudad Calle O&#039;higgins y Santa Fé. Hermosa casa distribuida en 2 plantas. PLANTA BAJA: Hall de ingreso, living, comedor, cocina amplia reciclada, 2 dormitorios, 1 baño completo, garaje, pequeño patio interno, lavadero y baño de servicio. Calefacción por radiadores. Muchos placares y bauleras. PLANTA ALTA: Dormitorio principal con baño en suite y vestidor, 2 balcones, quincho grande y moderno ,con parrilla, barra y aire acondicionado,1 baño completo, amplia terraza. La casa se encuentra en IMPECABLE estado. *Aceptan permuta por casa mas pequeña, toda en PB y de menor valor. En barrios Pedro Pico y San Martin preferentemente*</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/61530/Casa-en-Venta-en-Ohiggins-Y-Santa-Fe-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/7ee329ef7869e07bf4f67e0de10b7c68.jpeg" alt="Casa en Venta en Brown 1068, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Brown 1068, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 140.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 350 m²</span>
+                </div>
+
+          <p class="card-description">Chalet en Venta + Galpón a refaccionar. Valor: u$ 140.000.- Sup. Cub.: 350 m2, Lote: 10.5 x 49. Apto. Crédito ! Planta baja: hall de entrada, amplio living comedor al frente, comedor diario, cocina y lavadero. 2 dormitorios y 2 baños (uno completo con ante baño, otro de recepción). Entrada pasante de autos hasta el fondo y cubierta. Patio dividido, uno con la casa y portón, otro adelante de un galpón de 10.5 x 20. Ideal para trabajar y vivir ! Planta alta: escritorio, 1 dormitorio en suite (baño con ante baño, ventilación natural), salida del dorm a gran terraza ! Brown 1000 (cuadra comercial ) Consultas: 0291 15-460-2616⁩ / 291-4120609.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/59631/Casa-en-Venta-en-Brown-1068-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/55880fdf2ddc9ea5331b015f626d9050.jpeg" alt="Casa en Venta en Casanova 8, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Casanova 8, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 200.000
+          </div>
+
+    <div class="card-tags">
+                          <span class="tag">📐 201 m²</span>
+                </div>
+
+          <p class="card-description">Este impresionante inmueble se encuentra ubicado en Bahía Blanca, Buenos Aires, un lugar maravilloso con todas las comodidades a tu disposición. Está rodeado de centros comerciales, colegios y universidades, por lo que la message de entretenimiento y educación está garantizada. Esta área particularmente cuenta con un terreno de 201M2. La casa se encuentra a demoler Esta oferta en el mercado inmobiliario es una increíble oportunidad para que tengas tu lugar ideal para vivir. Podrás disfrutar de todas las comodidades de la zona sin renunciar a la privacidad que desees. ¡No pierdas la oportunidad y reserva tu visita hoy!</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/56057/Casa-en-Venta-en-Casanova-8-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/1cb4ae5bcc7cbeb5649f3327dac2041d.jpg" alt="Casa en Venta en Las Heras 500, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Las Heras 500, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 4 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                      </div>
+
+          <p class="card-description">Casa de dos plantas, compuesta por living comedor, cocina comedor y lavadero separado. Tiene 4 dormitorios, biblioteca y 2 baños, 1 en cada planta. Con patio y garaje</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/48343/Casa-en-Venta-en-Las-Heras-500-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/60b94e23bb9bb1ae6d968abca8727b04.jpeg" alt="Casa en Venta en Undiano 504, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Undiano 504, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+                            </div>
+
+          <p class="card-description">Propiedad ideal para emprendimiento comercial!!!! Frente sobre calle Undiano 16mts y sobre calle Thompson 8.66mts Sup total 138mts2.-</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/46838/Casa-en-Venta-en-Undiano-504-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/8d5f5a28d2863ac09c4256041f8a9525.jpg" alt="Casa en Venta en Caronti 200, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Caronti 200, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 4 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                      </div>
+
+          <p class="card-description">Casa de 4 dormitorios, 2 baños, living-comedor, cocina separada, lavadero, garage doble y patio. Apta para uso profesional.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/42671/Casa-en-Venta-en-Caronti-200-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/45595f3f26e28cac0760d30cbf089804.jpeg" alt="Casa en Venta en 19 De Mayo 63, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en 19 De Mayo 63, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 200.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 186 m²</span>
+                </div>
+
+          <p class="card-description">La casa se encuentra construida sobre un lote de 297 m2, con 10,55m de frente x 29,62m de fondo y una superficie cubierta de 186m2. Zona de edificación R1. Consta de: - Una sala de estar muy amplia con chimenea. - Dos dormitorios principales, una habitación de servicio y un escritorio. -Una cocina comedor. -Un baño principal y un baño de servicio. -Un patio amplio. -Una terraza. -Un sótano. La casa se encuentra en una ubicación estratégica y es apta para múltiples destinos. Actualmente es utilizada como consultorios médicos. Consultas a Área ventas 291 523 9314</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/41369/Casa-en-Venta-en-19-De-Mayo-63-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/6487a88fc7f6f1be10ac94f95dbe7eab.png" alt="Casa en Venta en 25 De Mayo 83, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en 25 De Mayo 83, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 120.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 3 baños</span>
+                    <span class="tag">📐 200 m²</span>
+                </div>
+
+          <p class="card-description">CASA ANTIGUA EN VENTA - 25 DE MAYO 83 Casa desarrollada totalmente en planta baja. Compuesta por hall de ingreso (pequeño living) con salida a patio de luz. Amplio dormitorio al frente (en estado original). Cocina alargada integrada por barra a comedor. Pasillo de distribución a sector privado: dormitorio amplio con placard, baño completo con bañera, dormitorio con baño de servicio. Garaje cubierto pasante (para tres vehículos). Patio y lavadero. Sobre el fondo del lote, cuenta con departamento en planta alta, con pequeña cocina y baño. Lote de 10 x 25, con 200 m2 cubiertos aprox. Calefacción por calefactores. Cañerías de gas y agua remodeladas hace 20 años aproximadamente.- Evalúan permuta por menor valor.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/39238/Casa-en-Venta-en-25-De-Mayo-83-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/e8c3e65f9f454cddd8490307d76c8664.jpg" alt="Casa en Venta en Pasaje Husares 460, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Pasaje Husares 460, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 4 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                      </div>
+
+          <p class="card-description">Casa de cuatro dormitorios, cuatro baños, living, cocina con comedor, lavadero, garage, y patio</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/36759/Casa-en-Venta-en-Pasaje-Husares-460-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/5452aae9c46b8b6782a4cf6846edcce5.jpg" alt="Casa en Venta en Beruti 494, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Beruti 494, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 160.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 4 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                    <span class="tag">📐 140 m²</span>
+                </div>
+
+          <p class="card-description">Casa: Planta baja, Entrada por calle Beruti, 3 ambientes, cochera para dos autos, 130 mts2.- Departamento: Entrada por la calle Villarino, Primer piso, 3 ambientes, patio/balcón, 70 mts2.- (ingresos, agua y electricidad independientes) Expediente de subdivisión en trámite, venta en block</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/28487/Casa-en-Venta-en-Beruti-494-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/085f75887b47929ef648c674dbb6c5b8.jpg" alt="Casa en Venta en Roca 100, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Roca 100, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">Precio a consultar</span>
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 2 baños</span>
+                      </div>
+
+          <p class="card-description">Hermosa casa interna de 140 mt2 cubiertos, tres dormitorios, dos baños, patio y quincho.</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/27867/Casa-en-Venta-en-Roca-100-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+          <article class="card  ">
+      <img class="card-image" src="https://www.bahiablancapropiedades.com/assets/img/propiedades/2866b6368181610bfa3abb64c524517a.JPG" alt="Casa en Venta en Brown 1638, Bahia Blanca, Macrocentro, Bahía Blanca" loading="lazy">
+  
+  <div class="card-body">
+    <div class="card-meta">
+      <span class="badge badge-source">bahiablancaprop</span>
+                </div>
+
+    <h3 class="card-title">Casa en Venta en Brown 1638, Bahia Blanca, Macrocentro, Bahía Blanca</h3>
+
+    <div class="card-price">
+              USD 150.000
+          </div>
+
+    <div class="card-tags">
+              <span class="tag">🛏 3 dorm.</span>
+                    <span class="tag">🚿 4 baños</span>
+                    <span class="tag">📐 480 m²</span>
+                </div>
+
+          <p class="card-description">Venta Casa+ Galpón. Salida a 2 calles. Brown 1600 Excelente propiedad ubicada sobre Brown al 1600, con salida a calle Capitán Martinez.- Casa: con entrada independiente por Brown, compuesta por 3d, living, comedor, cocina, estar, baño, patio con pileta y gge p/2 autos.- Galpón: con entrada independiente Sobre Capitán Martinez de 17.20 x 6.32 con 2 oficinas y 3 baños (alquilado).- Se trata de un inmueble conformado por un lote de 9,1m de frente por 56m de fondo. Superficie total: 480m2.- Ubicación ideal para emprendimiento comercial, a metros de la Terminal de ómnibus de la ciudad.- Posibilidad de tomar algún departamento en Bahía Blanca, Monte Hermoso o Mar del Plata.- Consultas: Filippone Propiedades (291 154051284/2914728963)</p>
+    
+    <div class="card-footer">
+      <span class="card-date">
+                  Visto 0 seconds ago
+              </span>
+      <a href="https://www.bahiablancapropiedades.com/propiedad/9603/Casa-en-Venta-en-Brown-1638-Bahia-Blanca-Macrocentro-Bahía-Blanca" target="_blank" rel="noopener" class="card-link">Ver →</a>
+    </div>
+  </div>
+</article>
+      </div>
+  
+  
+</div>
+
+</body>
+</html>
